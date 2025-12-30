@@ -1,11 +1,15 @@
 -- Dex Hub Script para Roblox
--- Sistema completo com ESP, Teleporte, Voo e mais
+-- Sistema completo com ESP, Teleporte, Voo e Sistema de Key
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
+
+-- Key do sistema
+local CORRECT_KEY = "modz Z☆ X"
+local keyVerified = false
 
 -- Variáveis de controle
 local DexHub = {
@@ -45,6 +49,116 @@ elseif syn and syn.protect_gui then
 else
     ScreenGui.Parent = game.CoreGui
 end
+
+-- ====== SISTEMA DE KEY ======
+local KeyFrame = Instance.new("Frame")
+KeyFrame.Name = "KeyFrame"
+KeyFrame.Size = UDim2.new(0, 400, 0, 250)
+KeyFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+KeyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+KeyFrame.BorderSizePixel = 0
+KeyFrame.Parent = ScreenGui
+
+local KeyCorner = Instance.new("UICorner")
+KeyCorner.CornerRadius = UDim.new(0, 15)
+KeyCorner.Parent = KeyFrame
+
+-- Título do Key System
+local KeyTitle = Instance.new("TextLabel")
+KeyTitle.Size = UDim2.new(1, -40, 0, 50)
+KeyTitle.Position = UDim2.new(0, 20, 0, 20)
+KeyTitle.BackgroundTransparency = 1
+KeyTitle.Text = "🔐 Dex Hub - Sistema de Key"
+KeyTitle.TextColor3 = Color3.fromRGB(255, 200, 50)
+KeyTitle.TextSize = 20
+KeyTitle.Font = Enum.Font.GothamBold
+KeyTitle.Parent = KeyFrame
+
+-- Subtítulo
+local KeySubtitle = Instance.new("TextLabel")
+KeySubtitle.Size = UDim2.new(1, -40, 0, 30)
+KeySubtitle.Position = UDim2.new(0, 20, 0, 70)
+KeySubtitle.BackgroundTransparency = 1
+KeySubtitle.Text = "Digite a key para acessar o hub"
+KeySubtitle.TextColor3 = Color3.fromRGB(200, 200, 200)
+KeySubtitle.TextSize = 14
+KeySubtitle.Font = Enum.Font.Gotham
+KeySubtitle.Parent = KeyFrame
+
+-- Input da Key
+local KeyInput = Instance.new("TextBox")
+KeyInput.Size = UDim2.new(1, -40, 0, 40)
+KeyInput.Position = UDim2.new(0, 20, 0, 110)
+KeyInput.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+KeyInput.BorderSizePixel = 0
+KeyInput.Text = ""
+KeyInput.PlaceholderText = "Digite a key aqui..."
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+KeyInput.TextSize = 14
+KeyInput.Font = Enum.Font.Gotham
+KeyInput.Parent = KeyFrame
+
+local KeyInputCorner = Instance.new("UICorner")
+KeyInputCorner.CornerRadius = UDim.new(0, 8)
+KeyInputCorner.Parent = KeyInput
+
+-- Botão Verificar
+local VerifyButton = Instance.new("TextButton")
+VerifyButton.Size = UDim2.new(1, -40, 0, 40)
+VerifyButton.Position = UDim2.new(0, 20, 0, 165)
+VerifyButton.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
+VerifyButton.BorderSizePixel = 0
+VerifyButton.Text = "✓ Verificar Key"
+VerifyButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+VerifyButton.TextSize = 16
+VerifyButton.Font = Enum.Font.GothamBold
+VerifyButton.Parent = KeyFrame
+
+local VerifyCorner = Instance.new("UICorner")
+VerifyCorner.CornerRadius = UDim.new(0, 8)
+VerifyCorner.Parent = VerifyButton
+
+-- Mensagem de erro/sucesso
+local KeyMessage = Instance.new("TextLabel")
+KeyMessage.Size = UDim2.new(1, -40, 0, 20)
+KeyMessage.Position = UDim2.new(0, 20, 0, 215)
+KeyMessage.BackgroundTransparency = 1
+KeyMessage.Text = ""
+KeyMessage.TextColor3 = Color3.fromRGB(255, 50, 50)
+KeyMessage.TextSize = 12
+KeyMessage.Font = Enum.Font.Gotham
+KeyMessage.Parent = KeyFrame
+
+-- Função de verificação da key
+local function VerifyKey()
+    local inputKey = KeyInput.Text
+    
+    if inputKey == CORRECT_KEY then
+        keyVerified = true
+        KeyMessage.Text = "✓ Key correta! Carregando..."
+        KeyMessage.TextColor3 = Color3.fromRGB(50, 255, 50)
+        wait(1)
+        KeyFrame:Destroy()
+        -- Continuar com o carregamento do hub
+        LoadMainHub()
+    else
+        KeyMessage.Text = "✗ Key incorreta! Tente novamente."
+        KeyMessage.TextColor3 = Color3.fromRGB(255, 50, 50)
+        KeyInput.Text = ""
+    end
+end
+
+VerifyButton.MouseButton1Click:Connect(VerifyKey)
+
+KeyInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        VerifyKey()
+    end
+end)
+
+-- ====== HUB PRINCIPAL ======
+function LoadMainHub()
 
 -- Botão de Toggle (Ícone)
 local ToggleButton = Instance.new("TextButton")
@@ -299,12 +413,14 @@ infoText.Text = [[
 🎮 Dex Hub v1.0
 
 Desenvolvido para Roblox
+Key: modz Z☆ X
 
 Recursos:
 • ESP customizável
 • Teleporte por clique
 • Sistema de voo
 • Interface arrastável
+• Sistema de Key
 
 Controles de Voo:
 • E - Subir
@@ -554,3 +670,9 @@ end)
 
 print("✅ Dex Hub carregado com sucesso!")
 print("🎮 Clique no ícone no canto esquerdo para abrir o menu")
+
+end
+
+-- Iniciar com sistema de key
+print("🔐 Sistema de Key ativado")
+print("📝 Digite a key para acessar o Dex Hub")
