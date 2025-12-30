@@ -27,10 +27,10 @@ local DexHub = {
         Enabled = false,
         ClickTeleport = false
     },
-    Flight = {
+    Speed = {
         Enabled = false,
-        Speed = 50,
-        Flying = false
+        WalkSpeed = 16,
+        JumpPower = 50
     }
 }
 
@@ -364,14 +364,14 @@ TeleportPage.ScrollBarThickness = 6
 TeleportPage.Visible = false
 TeleportPage.Parent = ContentArea
 
-local FlightPage = Instance.new("ScrollingFrame")
-FlightPage.Name = "FlightPage"
-FlightPage.Size = UDim2.new(1, 0, 1, 0)
-FlightPage.BackgroundTransparency = 1
-FlightPage.BorderSizePixel = 0
-FlightPage.ScrollBarThickness = 6
-FlightPage.Visible = false
-FlightPage.Parent = ContentArea
+local SpeedPage = Instance.new("ScrollingFrame")
+SpeedPage.Name = "SpeedPage"
+SpeedPage.Size = UDim2.new(1, 0, 1, 0)
+SpeedPage.BackgroundTransparency = 1
+SpeedPage.BorderSizePixel = 0
+SpeedPage.ScrollBarThickness = 6
+SpeedPage.Visible = false
+SpeedPage.Parent = ContentArea
 
 local InfoPage = Instance.new("ScrollingFrame")
 InfoPage.Name = "InfoPage"
@@ -398,7 +398,7 @@ end
 
 CreatePageTitle(ESPPage, "🎯 ESP Settings")
 CreatePageTitle(TeleportPage, "🚀 Teleporte")
-CreatePageTitle(FlightPage, "✈️ Voo")
+CreatePageTitle(SpeedPage, "⚡ Velocidade")
 CreatePageTitle(InfoPage, "ℹ️ Informações")
 
 -- ESP Switches
