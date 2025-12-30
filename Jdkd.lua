@@ -178,6 +178,40 @@ local ToggleCorner = Instance.new("UICorner")
 ToggleCorner.CornerRadius = UDim.new(0, 10)
 ToggleCorner.Parent = ToggleButton
 
+-- Arrastar ícone do Toggle
+local iconDragging, iconDragInput, iconDragStart, iconStartPos
+
+local function updateIconPosition(input)
+    local delta = input.Position - iconDragStart
+    ToggleButton.Position = UDim2.new(iconStartPos.X.Scale, iconStartPos.X.Offset + delta.X, iconStartPos.Y.Scale, iconStartPos.Y.Offset + delta.Y)
+end
+
+ToggleButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        iconDragging = true
+        iconDragStart = input.Position
+        iconStartPos = ToggleButton.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                iconDragging = false
+            end
+        end)
+    end
+end)
+
+ToggleButton.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        iconDragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == iconDragInput and iconDragging then
+        updateIconPosition(input)
+    end
+end)
+
 -- Frame Principal
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
