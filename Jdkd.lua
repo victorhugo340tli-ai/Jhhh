@@ -433,9 +433,165 @@ CreateSwitch(TeleportPage, "Teleporte ao Clicar", 50, function(enabled)
     DexHub.Teleport.ClickTeleport = enabled
 end)
 
--- Flight Switches
-CreateSwitch(FlightPage, "Ativar Voo", 50, function(enabled)
-    DexHub.Flight.Enabled = enabled
+-- Speed Switches e Sliders
+CreateSwitch(SpeedPage, "Ativar Velocidade", 50, function(enabled)
+    DexHub.Speed.Enabled = enabled
+end)
+
+-- Slider de WalkSpeed
+local walkSpeedFrame = Instance.new("Frame")
+walkSpeedFrame.Size = UDim2.new(1, -20, 0, 60)
+walkSpeedFrame.Position = UDim2.new(0, 10, 0, 90)
+walkSpeedFrame.BackgroundTransparency = 1
+walkSpeedFrame.Parent = SpeedPage
+
+local walkSpeedLabel = Instance.new("TextLabel")
+walkSpeedLabel.Size = UDim2.new(1, 0, 0, 20)
+walkSpeedLabel.BackgroundTransparency = 1
+walkSpeedLabel.Text = "Velocidade de Caminhada: 16"
+walkSpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+walkSpeedLabel.TextSize = 13
+walkSpeedLabel.Font = Enum.Font.Gotham
+walkSpeedLabel.TextXAlignment = Enum.TextXAlignment.Left
+walkSpeedLabel.Parent = walkSpeedFrame
+
+local walkSpeedSlider = Instance.new("Frame")
+walkSpeedSlider.Size = UDim2.new(1, 0, 0, 6)
+walkSpeedSlider.Position = UDim2.new(0, 0, 0, 30)
+walkSpeedSlider.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+walkSpeedSlider.BorderSizePixel = 0
+walkSpeedSlider.Parent = walkSpeedFrame
+
+local walkSpeedSliderCorner = Instance.new("UICorner")
+walkSpeedSliderCorner.CornerRadius = UDim.new(1, 0)
+walkSpeedSliderCorner.Parent = walkSpeedSlider
+
+local walkSpeedFill = Instance.new("Frame")
+walkSpeedFill.Size = UDim2.new(0.1, 0, 1, 0)
+walkSpeedFill.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
+walkSpeedFill.BorderSizePixel = 0
+walkSpeedFill.Parent = walkSpeedSlider
+
+local walkSpeedFillCorner = Instance.new("UICorner")
+walkSpeedFillCorner.CornerRadius = UDim.new(1, 0)
+walkSpeedFillCorner.Parent = walkSpeedFill
+
+local walkSpeedButton = Instance.new("TextButton")
+walkSpeedButton.Size = UDim2.new(0, 16, 0, 16)
+walkSpeedButton.Position = UDim2.new(0.1, -8, 0.5, -8)
+walkSpeedButton.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
+walkSpeedButton.BorderSizePixel = 0
+walkSpeedButton.Text = ""
+walkSpeedButton.Parent = walkSpeedSlider
+
+local walkSpeedButtonCorner = Instance.new("UICorner")
+walkSpeedButtonCorner.CornerRadius = UDim.new(1, 0)
+walkSpeedButtonCorner.Parent = walkSpeedButton
+
+-- Slider de JumpPower
+local jumpPowerFrame = Instance.new("Frame")
+jumpPowerFrame.Size = UDim2.new(1, -20, 0, 60)
+jumpPowerFrame.Position = UDim2.new(0, 10, 0, 160)
+jumpPowerFrame.BackgroundTransparency = 1
+jumpPowerFrame.Parent = SpeedPage
+
+local jumpPowerLabel = Instance.new("TextLabel")
+jumpPowerLabel.Size = UDim2.new(1, 0, 0, 20)
+jumpPowerLabel.BackgroundTransparency = 1
+jumpPowerLabel.Text = "Força do Pulo: 50"
+jumpPowerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+jumpPowerLabel.TextSize = 13
+jumpPowerLabel.Font = Enum.Font.Gotham
+jumpPowerLabel.TextXAlignment = Enum.TextXAlignment.Left
+jumpPowerLabel.Parent = jumpPowerFrame
+
+local jumpPowerSlider = Instance.new("Frame")
+jumpPowerSlider.Size = UDim2.new(1, 0, 0, 6)
+jumpPowerSlider.Position = UDim2.new(0, 0, 0, 30)
+jumpPowerSlider.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+jumpPowerSlider.BorderSizePixel = 0
+jumpPowerSlider.Parent = jumpPowerFrame
+
+local jumpPowerSliderCorner = Instance.new("UICorner")
+jumpPowerSliderCorner.CornerRadius = UDim.new(1, 0)
+jumpPowerSliderCorner.Parent = jumpPowerSlider
+
+local jumpPowerFill = Instance.new("Frame")
+jumpPowerFill.Size = UDim2.new(0.2, 0, 1, 0)
+jumpPowerFill.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
+jumpPowerFill.BorderSizePixel = 0
+jumpPowerFill.Parent = jumpPowerSlider
+
+local jumpPowerFillCorner = Instance.new("UICorner")
+jumpPowerFillCorner.CornerRadius = UDim.new(1, 0)
+jumpPowerFillCorner.Parent = jumpPowerFill
+
+local jumpPowerButton = Instance.new("TextButton")
+jumpPowerButton.Size = UDim2.new(0, 16, 0, 16)
+jumpPowerButton.Position = UDim2.new(0.2, -8, 0.5, -8)
+jumpPowerButton.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
+jumpPowerButton.BorderSizePixel = 0
+jumpPowerButton.Text = ""
+jumpPowerButton.Parent = jumpPowerSlider
+
+local jumpPowerButtonCorner = Instance.new("UICorner")
+jumpPowerButtonCorner.CornerRadius = UDim.new(1, 0)
+jumpPowerButtonCorner.Parent = jumpPowerButton
+
+-- Lógica do slider de WalkSpeed
+local walkSpeedDragging = false
+walkSpeedButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        walkSpeedDragging = true
+    end
+end)
+
+walkSpeedButton.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        walkSpeedDragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if walkSpeedDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local mousePos = UserInputService:GetMouseLocation()
+        local sliderPos = walkSpeedSlider.AbsolutePosition.X
+        local sliderSize = walkSpeedSlider.AbsoluteSize.X
+        local relativePos = math.clamp((mousePos.X - sliderPos) / sliderSize, 0, 1)
+        
+        DexHub.Speed.WalkSpeed = math.floor(16 + (relativePos * 184)) -- 16 a 200
+        walkSpeedLabel.Text = "Velocidade de Caminhada: " .. DexHub.Speed.WalkSpeed
+        walkSpeedFill.Size = UDim2.new(relativePos, 0, 1, 0)
+        walkSpeedButton.Position = UDim2.new(relativePos, -8, 0.5, -8)
+    end
+end)
+
+-- Lógica do slider de JumpPower
+local jumpPowerDragging = false
+jumpPowerButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        jumpPowerDragging = true
+    end
+end)
+
+jumpPowerButton.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        jumpPowerDragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if jumpPowerDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local mousePos = UserInputService:GetMouseLocation()
+        local sliderPos = jumpPowerSlider.AbsolutePosition.X
+        local sliderSize = jumpPowerSlider.AbsoluteSize.X
+        local relativePos = math.clamp((mousePos.X - sliderPos) / sliderSize, 0, 1)
+        
+        DexHub.Speed.JumpPower = math.floor(50 + (relativePos * 200)) -- 50 a 250
+        jumpPowerLabel.Text = "Força do Pulo: " .. DexHub.Speed.JumpPower
+        jumpPowerFill.Size = UDim2.new(relativePos, 0, 1, 0)
+        jumpPowerButton.Position = UDim2.new(relativePos, -8, 0.5, -8)
+    end
 end)
 
 -- Info Page
@@ -452,14 +608,14 @@ Key: modz Z☆ X
 Recursos:
 • ESP customizável
 • Teleporte por clique
-• Sistema de voo
+• Velocidade ajustável
 • Interface arrastável
 • Sistema de Key
 
-Controles de Voo:
-• E - Subir
-• Q - Descer
-• WASD - Movimento
+Controles de Velocidade:
+• Ajuste a velocidade de caminhada
+• Ajuste a força do pulo
+• Valores personalizáveis
 
 Aproveite!]]
 infoText.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -474,28 +630,28 @@ infoText.Parent = InfoPage
 CreateSidebarButton("ESP", 10, function()
     ESPPage.Visible = true
     TeleportPage.Visible = false
-    FlightPage.Visible = false
+    SpeedPage.Visible = false
     InfoPage.Visible = false
 end)
 
 CreateSidebarButton("Teleporte", 55, function()
     ESPPage.Visible = false
     TeleportPage.Visible = true
-    FlightPage.Visible = false
+    SpeedPage.Visible = false
     InfoPage.Visible = false
 end)
 
-CreateSidebarButton("Voo", 100, function()
+CreateSidebarButton("Velocidade", 100, function()
     ESPPage.Visible = false
     TeleportPage.Visible = false
-    FlightPage.Visible = true
+    SpeedPage.Visible = true
     InfoPage.Visible = false
 end)
 
 CreateSidebarButton("Info", 145, function()
     ESPPage.Visible = false
     TeleportPage.Visible = false
-    FlightPage.Visible = false
+    SpeedPage.Visible = false
     InfoPage.Visible = true
 end)
 
@@ -638,67 +794,14 @@ Mouse.Button1Down:Connect(function()
     end
 end)
 
--- Sistema de Voo
-local flyConnection
-local function StartFlying()
-    if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
-    
-    local hrp = LocalPlayer.Character.HumanoidRootPart
-    local humanoid = LocalPlayer.Character:FindFirstChild("Humanoid")
-    
-    local bodyVelocity = Instance.new("BodyVelocity")
-    bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-    bodyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-    bodyVelocity.Parent = hrp
-    
-    local bodyGyro = Instance.new("BodyGyro")
-    bodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
-    bodyGyro.CFrame = hrp.CFrame
-    bodyGyro.Parent = hrp
-    
-    flyConnection = RunService.RenderStepped:Connect(function()
-        if not DexHub.Flight.Enabled then
-            bodyVelocity:Destroy()
-            bodyGyro:Destroy()
-            if flyConnection then flyConnection:Disconnect() end
-            return
-        end
-        
-        local camera = workspace.CurrentCamera
-        local moveDir = Vector3.new(0, 0, 0)
-        
-        if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-            moveDir = moveDir + camera.CFrame.LookVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-            moveDir = moveDir - camera.CFrame.LookVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-            moveDir = moveDir - camera.CFrame.RightVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-            moveDir = moveDir + camera.CFrame.RightVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.E) then
-            moveDir = moveDir + Vector3.new(0, 1, 0)
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.Q) then
-            moveDir = moveDir - Vector3.new(0, 1, 0)
-        end
-        
-        bodyVelocity.Velocity = moveDir * DexHub.Flight.Speed
-        bodyGyro.CFrame = camera.CFrame
-    end)
-end
-
--- Monitorar ativação do voo
-local lastFlightState = false
+-- Sistema de Velocidade
 RunService.RenderStepped:Connect(function()
-    if DexHub.Flight.Enabled and not lastFlightState then
-        StartFlying()
-        lastFlightState = true
-    elseif not DexHub.Flight.Enabled and lastFlightState then
-        lastFlightState = false
+    if DexHub.Speed.Enabled and LocalPlayer.Character then
+        local humanoid = LocalPlayer.Character:FindFirstChild("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = DexHub.Speed.WalkSpeed
+            humanoid.JumpPower = DexHub.Speed.JumpPower
+        end
     end
 end)
 
